@@ -1,0 +1,22 @@
+{% extends "admin_base.html" %}
+{% block content %}
+
+<div class="big-photo" style="width:280px;height:280px;"></div>
+
+<div class="detail-block">
+  <div class="item-title" style="font-size:16px;">{{ item.title }}</div>
+  <p><span class="label">Location:</span> {{ item.location or "—" }}</p>
+  <p><span class="label">Description:</span> {{ item.description or "—" }}</p>
+  <div class="hr"></div>
+  <p><span class="label">Posted by</span> {{ item.posted_by or "—" }}</p>
+  <p><span class="label">Contact Info:</span></p>
+  <p>Phone: {{ item.phone or "—" }}</p>
+  <p>Email: {{ item.email or "—" }}</p>
+  <p>Instagram: {{ item.instagram or "—" }}</p>
+</div>
+
+<form method="post" action="{{ action_url }}">
+  <button class="action-btn" type="submit">Processing Report</button>
+</form>
+
+{% endblock %}

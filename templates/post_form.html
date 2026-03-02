@@ -1,0 +1,29 @@
+{% extends "base_user.html" %}
+{% block content %}
+
+<div class="section-title">Make a Post</div>
+
+<div class="photo-row">
+  <div class="photo-mini"></div>
+  <button class="photo-btn" type="button">Add Photo</button>
+</div>
+
+<form class="form-wrap" method="post" action="{{ form_action }}">
+  <div class="form-row">
+    <input class="input-gray" name="title" placeholder="Name"
+           value="{{ defaults.title if defaults else '' }}" required>
+  </div>
+
+  <div class="form-row">
+    <input class="input-gray" name="location" placeholder="Location Found"
+           value="{{ defaults.location if defaults else '' }}">
+  </div>
+
+  <div class="form-row">
+    <textarea class="textarea-gray" name="description" placeholder="Description">{{ defaults.description if defaults else '' }}</textarea>
+  </div>
+
+  <button class="primary-btn" type="submit">Post</button>
+</form>
+
+{% endblock %}

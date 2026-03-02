@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/autherization.css') }}">
+</head>
+<body>
+    <div class="page">
+        <h2 class="page-title">Register</h2>
+
+        <div class="auth-card">
+            <div class="logo-circle"></div>
+            <h1 class="app-title">Lost and Found</h1>
+            <p class="first-time-note">First time here? Enter your name to create your account.</p>
+
+            <!--
+                Registration form (frontend prototype):
+                - `email` accepts NetID or full email (frontend normalizes NetID to @nyu.edu).
+                - `name` is required for first-time signup so the UI can display the user's
+                  name later when the backend is implemented.
+                - Password fields are present for completeness; backend validation will be
+                  added later.
+            -->
+            <form class="auth-form" method="POST" action="/register">
+                <input type="text" name="email" placeholder="NetID or netid@nyu.edu" required>
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <button type="submit">Register</button>
+            </form>
+
+            <div class="auth-links">
+                <p>Already have an account? <a href="/login">Click here to log in.</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
