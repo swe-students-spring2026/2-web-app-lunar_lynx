@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Log In</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <div class="topbar">
+        <div class="page-title">Admin Log In</div>
+      </div>
+
+      <div class="main">
+        <div style="text-align:center; margin-top:18px;">
+          <div style="width:220px;height:220px;border-radius:50%;background:#d9d9d9;margin:0 auto;"></div>
+          <div class="section-title" style="margin-top:14px;">Lost and Found</div>
+        </div>
+
+        <form class="form-wrap" method="post" action="{{ form_action }}">
+          <div class="form-row">
+            <input class="input-gray" name="email" placeholder="Email">
+          </div>
+          <div class="form-row">
+            <input class="input-gray" type="password" name="password" placeholder="Password">
+          </div>
+          <button class="primary-btn" type="submit">Log In</button>
+        </form>
+
+        <div class="link-row">
+          Need an account? <a href="{{ url_for('register') }}">Click here to register.</a><br>
+          I'm not an admin. <a href="{{ url_for('list_posts', status='lost') }}">Back to user-login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
