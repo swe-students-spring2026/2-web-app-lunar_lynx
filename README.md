@@ -20,6 +20,8 @@ Start up a MongoDB database either using [MongoDB Atlas](https://www.mongodb.com
 
 Create a `.env` file that corresponds to the given example file `env.example`. Edit the values to match your database.
 
+See `schema.md` for database structure.
+
 ### Virtual environment
 
 Create a new virtual environment:
@@ -39,6 +41,16 @@ To install the required dependencies into the currently-active virtual environme
 ```
 pip install -r requirements.txt
 ```
+
+### Running the app
+
+#### Development Server
+
+To run the app locally in development mode:
+- Define two environment variables from the command line:
+    - Mac: `export FLASK_APP=app.py` and `export FLASK_ENV=development`
+    - Windows: `set FLASK_APP=app.py` and `set FLASK_ENV=development`
+- Start flask with `flask run` and visit the outputted address where the app is running locally.
 
 ## Task boards
 
