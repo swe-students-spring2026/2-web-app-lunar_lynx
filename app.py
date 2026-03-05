@@ -346,6 +346,22 @@ def create_app():
             rendered template (str): The rendered HTML template.
         """
         return "error"
+    
+    @app.route("/profile")
+    @login_required
+    def profile():
+        """
+        User profile page.
+        """
+        user_id = current_user.get_id()
+        user_doc = db.users.find_one({"_id": ObjectId(user_id)})
+
+        if not user_doc:
+            return "User not found.", 404
+
+        user_posts = list(db.posts.find({"created_by": ObjectId(user_id)}).sort("created_at", -1))
+
+        return render_template("profile.html", user=user_doc, posts=user_posts)
 
     return app
 
