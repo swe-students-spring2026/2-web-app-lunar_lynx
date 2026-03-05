@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+
+<p><a href="/">← Back to home</a></p>
+
+<h1>{{ post.title }}</h1>
+
+<p><b>Type:</b> {{ post.type }}</p>
+<p><b>Status:</b> {{ post.status }}</p>
+
+{% if post.location_text %}
+  <p><b>Location:</b> {{ post.location_text }}</p>
+{% endif %}
+
+{% if post.date_lost_or_found %}
+  <p><b>Date lost/found:</b> {{ post.date_lost_or_found }}</p>
+{% endif %}
+
+{% set is_owner = (post.created_by|string) == current_user.get_id() %}
+
+{% if is_owner or current_user.is_admin %}
+  <hr>
+  <h3>Manage Post</h3>
+
+  <form method="POST" action="/posts/{{ post._id }}/status">
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="open" {% if post.status == "open" %}selected{% endif %}>open</option>
+      <option value="claimed" {% if post.status == "claimed" %}selected{% endif %}>claimed</option>
+      <option value="resolved" {% if post.status == "resolved" %}selected{% endif %}>resolved</option>
+    </select>
+    <button type="submit">Update</button>
+  </form>
+
+  <form method="POST" action="/posts/{{ post._id }}/delete">
+    <button type="submit">Delete Post</button>
+  </form>
+{% endif %}
+
+<hr>
+
+<p>{{ post.description }}</p>
+
+<hr>
+
+{% if post.created_at %}
+  <p><small>Posted: {{ post.created_at }}</small></p>
+{% endif %}
+
+</body>
+</html>

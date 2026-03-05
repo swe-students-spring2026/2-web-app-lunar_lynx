@@ -92,6 +92,31 @@ def create_app():
         )
         return render_template("home.html", posts=posts)
     
+    @app.route("/search", methods=["GET"])
+    @login_required
+    def search():
+        """
+        Search posts by keyword in title/description.
+        Reuses home.html to display results.
+        """
+        query = (request.args.get("query") or "").strip()
+
+        if not query:
+            # If empty search, just go back home
+            return redirect(url_for("home"))
+
+        # Simple regex search (case-insensitive) over title/description
+        filter_q = {
+            "status": "open",
+            "$or": [
+                {"title": {"$regex": query, "$options": "i"}},
+                {"description": {"$regex": query, "$options": "i"}},
+            ],
+        }
+
+        posts = list(db.posts.find(filter_q).sort("created_at", -1).limit(50))
+        return render_template("home.html", posts=posts)
+    
     @app.route("/posts/new", methods=["GET"])
     @login_required
     def new_post():
@@ -99,6 +124,134 @@ def create_app():
         Show the create-post form.
         """
         return render_template("new_post.html")
+    
+    @app.route("/posts", methods=["POST"])
+    @login_required
+    def create_post():
+        """
+        Handle create-post form submission.
+        Inserts a post into MongoDB, then redirects home.
+        """
+        post_type = (request.form.get("type") or "").strip().lower()
+        title = (request.form.get("title") or "").strip()
+        description = (request.form.get("description") or "").strip()
+        location_text = (request.form.get("location_text") or "").strip()
+        date_str = (request.form.get("date_lost_or_found") or "").strip()
+
+        # Basic validation
+        if post_type not in {"lost", "found"} or not title or not description:
+            return "Invalid post data", 400
+
+        # Parse optional date (YYYY-MM-DD)
+        date_lost_or_found = None
+        if date_str:
+            try:
+                date_lost_or_found = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(
+                    tzinfo=datetime.timezone.utc
+                )
+            except ValueError:
+                return "Invalid date format", 400
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        doc = {
+            "title": title,
+            "description": description,
+            "type": post_type,
+            "status": "open",
+            "location_text": location_text if location_text else None,
+            "date_lost_or_found": date_lost_or_found,
+            "created_by": ObjectId(current_user.get_id()),
+            "created_at": now,
+            "updated_at": now,
+        }
+
+        db.posts.insert_one(doc)
+        return redirect(url_for("home"))
+
+    @app.route("/posts/<post_id>", methods=["GET"])
+    @login_required
+    def post_detail(post_id):
+        """
+        View a single post by id.
+        """
+        try:
+            oid = ObjectId(post_id)
+        except Exception:
+            return "Invalid post id", 400
+
+        post = db.posts.find_one({"_id": oid})
+        if not post:
+            return "Post not found", 404
+
+        return render_template("post_detail.html", post=post)
+    
+    @app.route("/posts/<post_id>/status", methods=["POST"])
+    @login_required
+    def update_post_status(post_id):
+        """
+        Update a post's status (creator or admin only).
+        """
+        try:
+            oid = ObjectId(post_id)
+        except Exception:
+            return "Invalid post id", 400
+
+        post = db.posts.find_one({"_id": oid})
+        if not post:
+            return "Post not found", 404
+
+        # Permission: only creator or admin
+        try:
+            current_oid = ObjectId(current_user.get_id())
+        except Exception:
+            return "Invalid user id", 400
+
+        is_owner = post.get("created_by") == current_oid
+        if not (is_owner or current_user.is_admin):
+            return "Forbidden", 403
+
+        new_status = (request.form.get("status") or "").strip().lower()
+        allowed = {"open", "claimed", "resolved"}
+        if new_status not in allowed:
+            return "Invalid status", 400
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        db.posts.update_one(
+            {"_id": oid},
+            {"$set": {"status": new_status, "updated_at": now}},
+        )
+
+        return redirect(url_for("post_detail", post_id=post_id))
+    
+    @app.route("/posts/<post_id>/delete", methods=["POST"])
+    @login_required
+    def delete_post(post_id):
+        """
+        Delete a post (creator or admin only).
+        """
+        try:
+            oid = ObjectId(post_id)
+        except Exception:
+            return "Invalid post id", 400
+
+        post = db.posts.find_one({"_id": oid})
+        if not post:
+            return "Post not found", 404
+
+        # Permission: only creator or admin
+        try:
+            current_oid = ObjectId(current_user.get_id())
+        except Exception:
+            return "Invalid user id", 400
+
+        is_owner = post.get("created_by") == current_oid
+        if not (is_owner or current_user.is_admin):
+            return "Forbidden", 403
+
+        db.posts.delete_one({"_id": oid})
+        return redirect(url_for("home"))
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
