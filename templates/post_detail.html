@@ -48,7 +48,17 @@
 <hr>
 
 {% if post.created_at %}
-  <p><small>Posted: {{ post.created_at }}</small></p>
+  <p class="item-meta">
+    <small>
+      Posted: {{ post.created_at }} | 
+      Posted by: 
+      {% if post.author_id %}
+        <a href="{{ url_for('profile_by_id', user_id=post.author_id) }}">{{ post.author_name }}</a>
+      {% else %}
+        {{ post.author_name }}
+      {% endif %}
+    </small>
+  </p>
 {% endif %}
 
 </body>

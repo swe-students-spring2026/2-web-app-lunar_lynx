@@ -9,18 +9,21 @@
     <h2>{{ user.full_name }}</h2>
     <p><strong>NetID:</strong> {{ user.netid }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Role:</strong> {{ user.role }}</p>
-    <p><strong>Status:</strong> {{ user.status }}</p>
-    <p><strong>Registered at:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
-    <p><strong>Last login:</strong>
-        {% if user.last_login_at %}
-            {{ user.last_login_at.strftime('%Y-%m-%d %H:%M') }}
-        {% else %}
-            Never
-        {% endif %}
-    </p>
 
-    <h2>Your Posts</h2>
+    {% if current_user.get_id() == user._id|string %}
+        <p>
+            <a href="{{ url_for('edit_profile') }}"><button>Edit Profile</button></a>
+        </p>
+    {% endif %}
+
+    <h2>
+    {% if current_user.get_id() == user._id|string %}
+        Your Listings
+    {% else %}
+        {{ user.full_name }}'s Listings
+    {% endif %}
+    </h2>
+
     {% if posts %}
         <ul>
             {% for post in posts %}
