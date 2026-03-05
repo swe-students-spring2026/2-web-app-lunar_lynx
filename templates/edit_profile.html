@@ -1,30 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Profile</title>
+  <meta charset="UTF-8">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Edit Profile</h1>
 
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
-    {% endif %}
+<div class="phone">
+<div class="screen">
 
-    <form method="POST" action="{{ url_for('edit_profile') }}">
-        <p>
-            <label>Full Name: <input type="text" name="full_name" value="{{ user.full_name }}"></label>
-        </p>
-        <p>
-            <label>NetID: <input type="text" name="netid" value="{{ user.netid }}"></label>
-        </p>
-        <p>
-            <label>Email: <input type="email" name="email" value="{{ user.email }}"></label>
-        </p>
-        <p>
-            <button type="submit">Save Changes</button>
-            <a href="{{ url_for('profile') }}"><button type="button">Cancel</button></a>
-        </p>
-    </form>
+  <div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Edit Profile</div>
+  </div>
+
+  <div class="main">
+
+    <p style="margin: 0 0 12px;">
+      <a href="{{ url_for('profile') }}" style="color:inherit; text-decoration:none;">← Back to Profile</a>
+    </p>
+
+    <div class="detail-block">
+
+      <h1 class="h1 center" style="margin-top:0;">Edit Profile</h1>
+
+      {% if error %}
+        <p style="color:red; margin: 10px 0 0;">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('edit_profile') }}" style="margin-top:14px;">
+
+        <div class="form-row">
+          <label for="full_name">Full Name</label>
+          <input id="full_name" type="text" name="full_name" value="{{ user.full_name }}" class="input-gray">
+        </div>
+
+        <div class="form-row">
+          <label for="netid">NetID</label>
+          <input id="netid" type="text" name="netid" value="{{ user.netid }}" class="input-gray">
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" value="{{ user.email }}" class="input-gray">
+        </div>
+
+        <button type="submit" class="primary-btn" style="width:100%;">Save Changes</button>
+
+        <a href="{{ url_for('profile') }}"
+           class="primary-btn"
+           style="width:100%; margin-top:10px; text-align:center; display:block; background:#6b7280;">
+          Cancel
+        </a>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
+
 </body>
 </html>

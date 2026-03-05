@@ -1,56 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Lost & Found</title>
+  <meta charset="UTF-8">
+  <title>Lost & Found</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<h1>Lost & Found</h1>
+<div class="phone">
+<div class="screen">
 
-<p>
-    <a href="/posts/new"><button>Create Post</button></a>
-    <a href="{{ url_for('profile') }}"><button>Profile</button></a>
-</p>
-
-<form method="GET" action="/search">
-    <input type="text" name="query" placeholder="Search posts">
-    <button type="submit">Search</button>
-</form>
-
-<hr>
-
-<h2>Recent Posts</h2>
-
-{% if posts|length == 0 %}
-  <p>No posts yet.</p>
-{% endif %}
-
-{% for post in posts %}
-  <div>
-    <h3>
-      <a href="/posts/{{ post._id }}">{{ post.title }}</a>
-    </h3>
-    <p>{{ post.description }}</p>
-    <p><b>Type:</b> {{ post.type }} | <b>Status:</b> {{ post.status }}</p>
-    {% if post.location_text %}
-      <p><b>Location:</b> {{ post.location_text }}</p>
-    {% endif %}
-    {% if post.created_at %}
-      <p class="item-meta">
-        <small>
-          Posted: {{ post.created_at }} | 
-          Posted by: 
-          {% if post.author_id %}
-            <a href="{{ url_for('profile_by_id', user_id=post.author_id) }}">{{ post.author_name }}</a>
-          {% else %}
-            {{ post.author_name }}
-          {% endif %}
-        </small>
-      </p>
-    {% endif %}
+  <div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Found</div>
   </div>
-  <hr>
-{% endfor %}
+
+  <div class="main">
+
+    <!-- Search -->
+    <form method="GET" action="/search" style="margin-bottom:14px;">
+      <input class="search-input input-gray" type="text" name="query" placeholder="Search posts">
+    </form>
+
+    <!-- Posts List -->
+    {% if posts|length == 0 %}
+      <div class="detail-block">
+        <p style="margin:0;">No posts yet.</p>
+      </div>
+    {% endif %}
+
+    {% for post in posts %}
+      <a href="/posts/{{ post._id }}" style="text-decoration:none; color:inherit;">
+        <div class="item-row">
+
+          <div class="thumb"></div>
+
+          <div>
+            <p class="item-title">{{ post.title }}</p>
+
+            {% if post.location_text %}
+              <p class="item-meta">{{ post.location_text }}</p>
+            {% endif %}
+
+            <p class="item-desc">{{ post.description }}</p>
+
+            <p class="item-meta">{{ post.type }} | {{ post.status }}</p>
+
+            {% if post.created_at %}
+              <p class="item-meta"><small>Posted: {{ post.created_at }}</small></p>
+            {% endif %}
+          </div>
+
+        </div>
+      </a>
+    {% endfor %}
+
+  </div>
+
+  <!-- Bottom buttons pinned to bottom -->
+  <div class="bottom-actions">
+    <a href="/posts/new" class="primary-btn" style="flex:1; margin:0; text-align:center;">Create Post</a>
+    <a href="{{ url_for('profile') }}" class="primary-btn" style="flex:1; margin:0; text-align:center;">Profile</a>
+  </div>
+
+</div>
+</div>
 
 </body>
 </html>

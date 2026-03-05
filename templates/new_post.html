@@ -1,53 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>New Post</title>
+  <meta charset="UTF-8">
+  <title>Create Post</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<h1>Create a Post</h1>
+<div class="phone">
+<div class="screen">
 
-<form method="POST" action="/posts">
-    <label for="type">Type:</label><br>
-    <select id="type" name="type" required>
-        <option value="lost">Lost</option>
-        <option value="found">Found</option>
-    </select><br><br>
+  <div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Create Post</div>
+  </div>
 
-    <label for="title">Title:</label><br>
-    <input id="title" name="title" type="text" required><br><br>
+  <div class="main">
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" rows="5" cols="40" required></textarea><br><br>
+    <!-- Back Button -->
+    <a href="{{ url_for('home') }}"
+       class="primary-btn"
+       style="display:block; text-align:center; width:100%; margin-bottom:20px;">
+       Back to Home
+    </a>
 
-    <label for="location_text">Location (optional):</label><br>
-    <input id="location_text" name="location_text" type="text"><br><br>
+    <form method="POST">
 
-    <label for="date_lost_or_found">Date lost/found (optional):</label><br>
-    <input id="date_lost_or_found" name="date_lost_or_found" type="date"><br><br>
+      <!-- Post Information -->
+      <div class="detail-block">
 
-    <h3>Contact Information</h3>
+        <label>Type</label>
+        <select name="type" class="input-gray">
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+        </select>
 
-    <label for="phone">Phone Number:</label><br>
-    <input 
-        id="phone"
-        name="phone"
-        type="tel"
-        pattern="\d{11}"
-        maxlength="11"
-        title="Phone number must be exactly 11 digits"
-    ><br><br>
+        <div style="height:16px;"></div>
 
-    <label for="email">Email:</label><br>
-    <input id="email" name="email" type="email"><br><br>
+        <label>Title</label>
+        <input type="text" name="title" class="input-gray" required>
 
-    <label for="other_contact">Other Contact (@X / @Instagram / etc):</label><br>
-    <input id="other_contact" name="other_contact" type="text"><br><br>
+        <div style="height:16px;"></div>
 
-    <button type="submit">Submit</button>
-</form>
+        <label>Description</label>
+        <textarea name="description" class="input-gray" rows="4" required></textarea>
 
-<p><a href="/">Back to home</a></p>
+        <div style="height:16px;"></div>
+
+        <label>Location (optional)</label>
+        <input type="text" name="location_text" class="input-gray">
+
+        <div style="height:16px;"></div>
+
+        <label>Date</label>
+        <input type="date" name="date" class="input-gray">
+
+      </div>
+
+
+      <!-- Contact Information -->
+      <div class="detail-block" style="margin-top:20px;">
+
+        <h3 style="margin-top:0;">Contact Information</h3>
+
+        <label for="phone">Phone Number</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+        <div style="height:14px;"></div>
+
+        <label for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+        <div style="height:14px;"></div>
+
+        <label for="other_contact">Other Contact (Instagram / X / etc)</label>
+        <input
+          id="other_contact"
+          name="other_contact"
+          type="text"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+      </div>
+
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="primary-btn"
+        style="width:100%; margin-top:20px;">
+        Submit Post
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+</div>
 
 </body>
 </html>
