@@ -26,6 +26,24 @@
     <label for="date_lost_or_found">Date lost/found (optional):</label><br>
     <input id="date_lost_or_found" name="date_lost_or_found" type="date"><br><br>
 
+    <h3>Contact Information</h3>
+
+    <label for="phone">Phone Number:</label><br>
+    <input 
+        id="phone"
+        name="phone"
+        type="tel"
+        pattern="\d{11}"
+        maxlength="11"
+        title="Phone number must be exactly 11 digits"
+    ><br><br>
+
+    <label for="email">Email:</label><br>
+    <input id="email" name="email" type="email"><br><br>
+
+    <label for="other_contact">Other Contact (@X / @Instagram / etc):</label><br>
+    <input id="other_contact" name="other_contact" type="text"><br><br>
+
     <button type="submit">Submit</button>
 </form>
 

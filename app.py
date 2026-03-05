@@ -180,6 +180,9 @@ def create_app():
         description = (request.form.get("description") or "").strip()
         location_text = (request.form.get("location_text") or "").strip()
         date_str = (request.form.get("date_lost_or_found") or "").strip()
+        phone = (request.form.get("phone") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        other = (request.form.get("other_contact") or "").strip()
 
         # Basic validation
         if post_type not in {"lost", "found"} or not title or not description:
@@ -204,6 +207,13 @@ def create_app():
             "status": "open",
             "location_text": location_text if location_text else None,
             "date_lost_or_found": date_lost_or_found,
+
+            "contact": {
+                "phone": phone if phone else None,
+                "email": email if email else None,
+                "other": other if other else None,
+            },
+
             "created_by": ObjectId(current_user.get_id()),
             "created_at": now,
             "updated_at": now,

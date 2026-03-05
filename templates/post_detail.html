@@ -20,6 +20,24 @@
   <p><b>Date lost/found:</b> {{ post.date_lost_or_found }}</p>
 {% endif %}
 
+{% if post.contact %}
+<hr>
+<h3>Contact Information</h3>
+
+{% if post.contact.phone %}
+<p><b>Phone:</b> {{ post.contact.phone }}</p>
+{% endif %}
+
+{% if post.contact.email %}
+<p><b>Email:</b> {{ post.contact.email }}</p>
+{% endif %}
+
+{% if post.contact.other %}
+<p><b>Other Contacts:</b> {{ post.contact.other }}</p>
+{% endif %}
+
+{% endif %}
+
 {% set is_owner = (post.created_by|string) == current_user.get_id() %}
 
 {% if is_owner or current_user.is_admin %}
