@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.full_name }}'s Profile</title>
+</head>
+<body>
+    <h1>Profile Page</h1>
+    <h2>{{ user.full_name }}</h2>
+    <p><strong>NetID:</strong> {{ user.netid }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    {% if current_user.get_id() == user._id|string %}
+        <p>
+            <a href="{{ url_for('edit_profile') }}"><button>Edit Profile</button></a>
+        </p>
+    {% endif %}
+
+    <h2>
+    {% if current_user.get_id() == user._id|string %}
+        Your Listings
+    {% else %}
+        {{ user.full_name }}'s Listings
+    {% endif %}
+    </h2>
+
+    {% if posts %}
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <a href="{{ url_for('post_detail', post_id=post._id) }}">{{ post.title }}</a>
+                    ({{ post.type }}, {{ post.status }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no posts yet.</p>
+    {% endif %}
+
+    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+</body>
+</html>
