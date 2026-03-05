@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Post</title>
+</head>
+<body>
+
+<h1>Create a Post</h1>
+
+<form method="POST" action="/posts">
+    <label for="type">Type:</label><br>
+    <select id="type" name="type" required>
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+    </select><br><br>
+
+    <label for="title">Title:</label><br>
+    <input id="title" name="title" type="text" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" rows="5" cols="40" required></textarea><br><br>
+
+    <label for="location_text">Location (optional):</label><br>
+    <input id="location_text" name="location_text" type="text"><br><br>
+
+    <label for="date_lost_or_found">Date lost/found (optional):</label><br>
+    <input id="date_lost_or_found" name="date_lost_or_found" type="date"><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<p><a href="/">Back to home</a></p>
+
+</body>
+</html>

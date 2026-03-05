@@ -82,14 +82,23 @@ def create_app():
     ### Page Routes (HTML) ###
 
     @app.route("/")
+    @login_required
     def home():
         """
-        Route for the home page.
+        Home page: show most recent posts.
         """
-        if current_user.is_authenticated:
-            # TODO: change maybe
-            return render_template("profile.html")
-        return redirect(url_for("login"))
+        posts = list(
+            db.posts.find({"status": "open"}).sort("created_at", -1).limit(50)
+        )
+        return render_template("home.html", posts=posts)
+    
+    @app.route("/posts/new", methods=["GET"])
+    @login_required
+    def new_post():
+        """
+        Show the create-post form.
+        """
+        return render_template("new_post.html")
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
@@ -103,20 +112,20 @@ def create_app():
             doc = db.users.find_one({"email": email})
 
             if not doc or not check_password_hash(doc["password_hash"], password):
-                return render_template("loginpage.html", error="Invalid email or password")
+                return render_template("login.html", error="Invalid email or password")
 
             user = User(doc)
             login_user(user)
 
             db.users.update_one(
                 {"_id": doc["_id"]},
-                {"$set": {"last_login_at": datetime.datetime.utcnow()}}
+                {"$set": {"last_login_at": datetime.datetime.now(datetime.timezone.utc)}}
             )
 
             next_url = request.args.get("next") or url_for("home")
             return redirect(next_url)
 
-        return render_template("loginpage.html")
+        return render_template("login.html")
 
     @app.route("/register", methods=["GET", "POST"])
     def register():
@@ -131,15 +140,14 @@ def create_app():
 
             if not netid or not email or not password:
                 return render_template(
-                    "registrationpage.html",
+                    "register.html",
                     error="NetID, email, and password are required.",
                 )
 
             existing = db.users.find_one({"email": email})
             if existing:
                 return render_template(
-                    "registrationpage.html",
-                    error="User with that email already exists.",
+                    "register.html", error="User with that email already exists.",
                 )
 
             doc = {
@@ -162,7 +170,7 @@ def create_app():
 
             return redirect(url_for("home"))
 
-        return render_template("registrationpage.html")
+        return render_template("register.html")
 
     @app.route("/logout")
     @login_required
@@ -184,7 +192,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return render_template("error.html", error=e)
+        return "error"
 
     return app
 
