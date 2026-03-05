@@ -345,7 +345,7 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return "error"
+        return str(e), 500
 
     return app
 

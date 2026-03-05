@@ -2,29 +2,33 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/authorization.css') }}">
 </head>
 <body>
 
-<h1>Login</h1>
+<div class="page">
+  <div class="auth-card">
 
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
+    <div class="logo-circle"></div>
+    <div class="app-title">Lost & Found</div>
 
-<form method="POST" action="{{ url_for('login') }}">
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+    {% if error %}
+      <p style="color:red; margin-bottom:12px;">{{ error }}</p>
+    {% endif %}
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
+    <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+      <input type="email" id="email" name="email" placeholder="Email" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
 
-    <button type="submit">Login</button>
-</form>
+    <div class="auth-links">
+      Don't have an account?
+      <a href="{{ url_for('register') }}">Register here</a>
+    </div>
 
-<p>
-    Don't have an account?  
-    <a href="{{ url_for('register') }}">Register here</a>
-</p>
+  </div>
+</div>
 
 </body>
 </html>

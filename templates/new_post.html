@@ -1,35 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Post</title>
+    <title>Create Post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<h1>Create a Post</h1>
+<div class="phone">
+<div class="screen">
+
+<div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Make a Post</div>
+</div>
+
+<div class="main">
+
+<h1 class="h1 center">Make a Post</h1>
+
+<div class="form-wrap">
 
 <form method="POST" action="/posts">
-    <label for="type">Type:</label><br>
-    <select id="type" name="type" required>
-        <option value="lost">Lost</option>
-        <option value="found">Found</option>
-    </select><br><br>
 
-    <label for="title">Title:</label><br>
-    <input id="title" name="title" type="text" required><br><br>
+<div class="form-row">
+<label for="type">Type</label>
+<select id="type" name="type" class="input-gray" required>
+<option value="lost">Lost</option>
+<option value="found">Found</option>
+</select>
+</div>
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" rows="5" cols="40" required></textarea><br><br>
+<div class="form-row">
+<label for="title">Title</label>
+<input id="title" name="title" type="text" class="input-gray" required>
+</div>
 
-    <label for="location_text">Location (optional):</label><br>
-    <input id="location_text" name="location_text" type="text"><br><br>
+<div class="form-row">
+<label for="description">Description</label>
+<textarea id="description" name="description" class="textarea-gray" required></textarea>
+</div>
 
-    <label for="date_lost_or_found">Date lost/found (optional):</label><br>
-    <input id="date_lost_or_found" name="date_lost_or_found" type="date"><br><br>
+<div class="form-row">
+<label for="location_text">Location (optional)</label>
+<input id="location_text" name="location_text" type="text" class="input-gray">
+</div>
 
-    <button type="submit">Submit</button>
+<div class="form-row">
+<label for="date_lost_or_found">Date lost/found (optional)</label>
+<input id="date_lost_or_found" name="date_lost_or_found" type="date" class="input-gray">
+</div>
+
+<button type="submit" class="primary-btn">Post</button>
+
 </form>
 
-<p><a href="/">Back to home</a></p>
+</div>
+
+<p class="center" style="margin-top:20px;">
+<a href="/">Back to Home</a>
+</p>
+
+</div>
+
+</div>
+</div>
 
 </body>
 </html>

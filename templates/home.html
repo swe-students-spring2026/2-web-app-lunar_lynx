@@ -2,44 +2,71 @@
 <html>
 <head>
     <title>Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<h1>Lost & Found</h1>
+<div class="phone">
+<div class="screen">
 
-<p>
-    <a href="/posts/new"><button>Create Post</button></a>
-</p>
+<div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Found</div>
+</div>
 
+<div class="main">
+
+<h1 class="h1 center">Lost something?</h1>
+<p class="sub center">Find it here!</p>
+
+<div class="search-block">
 <form method="GET" action="/search">
-    <input type="text" name="query" placeholder="Search posts">
-    <button type="submit">Search</button>
+    <input class="search-input" type="text" name="query" placeholder="Search posts">
 </form>
+</div>
 
-<hr>
-
-<h2>Recent Posts</h2>
+<div class="list">
 
 {% if posts|length == 0 %}
   <p>No posts yet.</p>
 {% endif %}
 
 {% for post in posts %}
-  <div>
-    <h3>
-      <a href="/posts/{{ post._id }}">{{ post.title }}</a>
-    </h3>
-    <p>{{ post.description }}</p>
-    <p><b>Type:</b> {{ post.type }} | <b>Status:</b> {{ post.status }}</p>
-    {% if post.location_text %}
-      <p><b>Location:</b> {{ post.location_text }}</p>
-    {% endif %}
-    {% if post.created_at %}
-      <p><small>Posted: {{ post.created_at }}</small></p>
-    {% endif %}
+  <a href="/posts/{{ post._id }}" style="text-decoration:none;color:inherit;">
+  <div class="item-row">
+
+      <div class="thumb"></div>
+
+      <div>
+        <p class="item-title">{{ post.title }}</p>
+
+        <p class="item-meta">
+            {{ post.type }} | {{ post.status }}
+        </p>
+
+        <p class="item-desc">
+            {{ post.description }}
+        </p>
+
+        {% if post.location_text %}
+        <p class="item-meta">
+            {{ post.location_text }}
+        </p>
+        {% endif %}
+      </div>
+
   </div>
-  <hr>
+  </a>
 {% endfor %}
+
+</div>
+
+<a href="/posts/new" class="primary-btn">Create Post</a>
+
+</div>
+
+</div>
+</div>
 
 </body>
 </html>
