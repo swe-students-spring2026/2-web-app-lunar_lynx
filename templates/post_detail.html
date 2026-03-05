@@ -1,28 +1,55 @@
-{% extends "base_user.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
 
-<div class="section-title">{{ "Lost Item Post" if item.status=='lost' else "Found Item Post" }}</div>
+<p><a href="/">← Back to home</a></p>
 
-<div class="big-photo"></div>
+<h1>{{ post.title }}</h1>
 
-<div class="detail-block">
-  <div class="item-title" style="font-size:16px;">{{ item.title }}</div>
-  <p><span class="label">Location:</span> {{ item.location or "—" }}</p>
-  <p><span class="label">Description:</span> {{ item.description or "—" }}</p>
+<p><b>Type:</b> {{ post.type }}</p>
+<p><b>Status:</b> {{ post.status }}</p>
 
-  <div class="hr"></div>
-
-  <p><span class="label">Posted by</span> {{ item.posted_by or "—" }}</p>
-  <p><span class="label">Contact Info:</span></p>
-  <p>Phone: {{ item.phone or "—" }}</p>
-  <p>Email: {{ item.email or "—" }}</p>
-  <p>Instagram: {{ item.instagram or "—" }}</p>
-</div>
-
-{% if item.status == 'lost' %}
-  <a class="action-btn" href="{{ url_for('mark_found', item_id=item._id) }}">I Found It!</a>
-{% else %}
-  <a class="action-btn" href="{{ url_for('claim_item', item_id=item._id) }}">Claim as Yours</a>
+{% if post.location_text %}
+  <p><b>Location:</b> {{ post.location_text }}</p>
 {% endif %}
 
-{% endblock %}
+{% if post.date_lost_or_found %}
+  <p><b>Date lost/found:</b> {{ post.date_lost_or_found }}</p>
+{% endif %}
+
+{% set is_owner = (post.created_by|string) == current_user.get_id() %}
+
+{% if is_owner or current_user.is_admin %}
+  <hr>
+  <h3>Manage Post</h3>
+
+  <form method="POST" action="/posts/{{ post._id }}/status">
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="open" {% if post.status == "open" %}selected{% endif %}>open</option>
+      <option value="claimed" {% if post.status == "claimed" %}selected{% endif %}>claimed</option>
+      <option value="resolved" {% if post.status == "resolved" %}selected{% endif %}>resolved</option>
+    </select>
+    <button type="submit">Update</button>
+  </form>
+
+  <form method="POST" action="/posts/{{ post._id }}/delete">
+    <button type="submit">Delete Post</button>
+  </form>
+{% endif %}
+
+<hr>
+
+<p>{{ post.description }}</p>
+
+<hr>
+
+{% if post.created_at %}
+  <p><small>Posted: {{ post.created_at }}</small></p>
+{% endif %}
+
+</body>
+</html>
