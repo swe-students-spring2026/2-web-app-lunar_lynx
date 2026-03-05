@@ -10,8 +10,8 @@
 <div class="screen">
 
 <div class="topbar">
-    <div class="avatar-dot"></div>
-    <div class="page-title">Found</div>
+  <div class="avatar-dot"></div>
+  <div class="page-title">Found</div>
 </div>
 
 <div class="main">
@@ -32,36 +32,44 @@
 {% endif %}
 
 {% for post in posts %}
-  <a href="/posts/{{ post._id }}" style="text-decoration:none;color:inherit;">
+
+<a href="/posts/{{ post._id }}" style="text-decoration:none;color:inherit;">
   <div class="item-row">
+    <div class="thumb"></div>
+    <div>
+      <p class="item-title">{{ post.title }}</p>
 
-      <div class="thumb"></div>
+      <p class="item-meta">
+        {{ post.type }} | {{ post.status }}
+      </p>
 
-      <div>
-        <p class="item-title">{{ post.title }}</p>
+      <p class="item-desc">{{ post.description }}</p>
 
+      {% if post.location_text %}
+        <p class="item-meta">{{ post.location_text }}</p>
+      {% endif %}
+
+      {% if post.created_at %}
         <p class="item-meta">
-            {{ post.type }} | {{ post.status }}
+          <small>
+            Posted: {{ post.created_at }}
+            {% if post.author_name %}
+              | Posted by: {{ post.author_name }}
+            {% endif %}
+          </small>
         </p>
-
-        <p class="item-desc">
-            {{ post.description }}
-        </p>
-
-        {% if post.location_text %}
-        <p class="item-meta">
-            {{ post.location_text }}
-        </p>
-        {% endif %}
-      </div>
-
+      {% endif %}
+    </div>
   </div>
-  </a>
+</a>
 {% endfor %}
 
 </div>
 
-<a href="/posts/new" class="primary-btn">Create Post</a>
+<div class="bottom-actions">
+  <a href="/posts/new" class="primary-btn" style="flex:1; margin:0; text-align:center;">Create Post</a>
+  <a href="{{ url_for('profile') }}" class="primary-btn" style="flex:1; margin:0; text-align:center;">Profile</a>
+</div>
 
 </div>
 

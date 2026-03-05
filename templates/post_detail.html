@@ -26,6 +26,28 @@
     <!-- Title -->
     <h1 class="h1" style="margin-top:14px;">{{ post.title }}</h1>
 
+    {% if post.contact %}
+      <hr>
+
+      <div class="detail-block" style="margin-top:14px;">
+        <p style="margin:0 0 10px;"><b>Contact Information</b></p>
+
+        {% if post.contact.phone %}
+          <p class="item-meta" style="margin:6px 0;"><b>Phone:</b> {{ post.contact.phone }}</p>
+        {% endif %}
+
+        {% if post.contact.email %}
+          <p class="item-meta" style="margin:6px 0;"><b>Email:</b> {{ post.contact.email }}</p>
+        {% endif %}
+
+        {% if post.contact.other %}
+          <p class="item-meta" style="margin:6px 0;"><b>Other:</b> {{ post.contact.other }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% set is_owner = (post.created_by|string) == current_user.get_id() %}
+
     <!-- Info block -->
     <div class="detail-block">
 
@@ -51,36 +73,46 @@
     {% set is_owner = (post.created_by|string) == current_user.get_id() %}
 
     {% if is_owner or current_user.is_admin %}
-      <div class="detail-block" style="margin-top:14px;">
-        <p style="margin:0 0 10px;"><b>Manage Post</b></p>
+    <div class="detail-block" style="margin-top:14px;">
+      <p style="margin:0 0 10px;"><b>Manage Post</b></p>
 
-        <form method="POST" action="/posts/{{ post._id }}/status" style="margin-bottom:12px;">
-          <label for="status" style="display:block; margin-bottom:6px;"><b>Status</b></label>
-          <select id="status" name="status" class="input-gray">
-            <option value="open" {% if post.status == "open" %}selected{% endif %}>open</option>
-            <option value="claimed" {% if post.status == "claimed" %}selected{% endif %}>claimed</option>
-            <option value="resolved" {% if post.status == "resolved" %}selected{% endif %}>resolved</option>
-          </select>
+      <form method="POST" action="/posts/{{ post._id }}/status" style="margin-bottom:12px;">
+        <label for="status" style="display:block; margin-bottom:6px;"><b>Status</b></label>
 
-          <button type="submit" class="primary-btn" style="width:100%; margin-top:12px;">Update</button>
-        </form>
+        <select id="status" name="status" class="input-gray">
+          <option value="open" {% if post.status == "open" %}selected{% endif %}>open</option>
+          <option value="claimed" {% if post.status == "claimed" %}selected{% endif %}>claimed</option>
+          <option value="resolved" {% if post.status == "resolved" %}selected{% endif %}>resolved</option>
+        </select>
 
-        <form method="POST" action="/posts/{{ post._id }}/delete">
-          <button type="submit" class="primary-btn" style="width:100%; background:#b91c1c;">Delete Post</button>
-        </form>
-      </div>
+        <button type="submit" class="primary-btn" style="width:100%; margin-top:12px;">Update</button>
+      </form>
+
+      <form method="POST" action="/posts/{{ post._id }}/delete">
+        <button type="submit" class="primary-btn" style="width:100%; background:#b91c1c;">
+          Delete Post
+        </button>
+      </form>
+    </div>
     {% endif %}
+
 
     {% if post.created_at %}
-      <p class="center" style="margin-top:16px;">
-        <small>Posted: {{ post.created_at }}</small>
-      </p>
+    <p class="item-meta" style="margin-top:16px;">
+      <small>
+        Posted: {{ post.created_at }} |
+
+        Posted by:
+        {% if post.author_id %}
+          <a href="{{ url_for('profile_by_id', user_id=post.author_id) }}">
+            {{ post.author_name }}
+          </a>
+        {% else %}
+          {{ post.author_name }}
+        {% endif %}
+      </small>
+    </p>
     {% endif %}
-
-  </div>
-
-</div>
-</div>
 
 </body>
 </html>

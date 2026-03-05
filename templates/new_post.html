@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Create Post</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>Create Post</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
@@ -10,58 +11,105 @@
 <div class="phone">
 <div class="screen">
 
-<div class="topbar">
+  <div class="topbar">
     <div class="avatar-dot"></div>
-    <div class="page-title">Make a Post</div>
-</div>
+    <div class="page-title">Create Post</div>
+  </div>
 
-<div class="main">
+  <div class="main">
 
-<h1 class="h1 center">Make a Post</h1>
+    <!-- Back button -->
+    <a href="{{ url_for('home') }}"
+       class="primary-btn"
+       style="display:block; text-align:center; width:100%; margin-bottom:20px;">
+       Back to Home
+    </a>
 
-<div class="form-wrap">
 
-<form method="POST" action="/posts">
+    <form method="POST">
 
-<div class="form-row">
-<label for="type">Type</label>
-<select id="type" name="type" class="input-gray" required>
-<option value="lost">Lost</option>
-<option value="found">Found</option>
-</select>
-</div>
+      <!-- Post info -->
+      <div class="detail-block">
 
-<div class="form-row">
-<label for="title">Title</label>
-<input id="title" name="title" type="text" class="input-gray" required>
-</div>
+        <label>Type</label>
+        <select name="type" class="input-gray">
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+        </select>
 
-<div class="form-row">
-<label for="description">Description</label>
-<textarea id="description" name="description" class="textarea-gray" required></textarea>
-</div>
+        <div style="height:16px;"></div>
 
-<div class="form-row">
-<label for="location_text">Location (optional)</label>
-<input id="location_text" name="location_text" type="text" class="input-gray">
-</div>
+        <label>Title</label>
+        <input type="text" name="title" class="input-gray">
 
-<div class="form-row">
-<label for="date_lost_or_found">Date lost/found (optional)</label>
-<input id="date_lost_or_found" name="date_lost_or_found" type="date" class="input-gray">
-</div>
+        <div style="height:16px;"></div>
 
-<button type="submit" class="primary-btn">Post</button>
+        <label>Description</label>
+        <textarea name="description" class="input-gray"></textarea>
 
-</form>
+        <div style="height:16px;"></div>
 
-</div>
+        <label>Location (optional)</label>
+        <input type="text" name="location_text" class="input-gray">
 
-<p class="center" style="margin-top:20px;">
-<a href="/">Back to Home</a>
-</p>
+        <div style="height:16px;"></div>
 
-</div>
+        <label>Date</label>
+        <input type="date" name="date" class="input-gray">
+
+      </div>
+
+
+      <!-- Contact info -->
+      <div class="detail-block" style="margin-top:20px;">
+
+        <h3 style="margin-top:0;">Contact Information</h3>
+
+        <label for="phone">Phone Number</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+        <div style="height:14px;"></div>
+
+        <label for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+        <div style="height:14px;"></div>
+
+        <label for="other_contact">Other Contact (Instagram, X, etc)</label>
+        <input
+          id="other_contact"
+          name="other_contact"
+          type="text"
+          class="input-gray"
+          placeholder="optional"
+        >
+
+      </div>
+
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="primary-btn"
+        style="width:100%; margin-top:20px;">
+        Submit Post
+      </button>
+
+    </form>
+
+  </div>
 
 </div>
 </div>

@@ -90,8 +90,51 @@ def create_app():
         posts = list(
             db.posts.find({"status": "open"}).sort("created_at", -1).limit(50)
         )
+
+        for post in posts:
+            user_doc = db.users.find_one({"_id": post["created_by"]})
+            if user_doc:
+                post["author_name"] = user_doc.get("full_name", "Unknown")
+                post["author_id"] = str(user_doc["_id"])
+            else:
+                post["author_name"] = "Unknown"
+                post["author_id"] = None
+
         return render_template("home.html", posts=posts)
     
+    @app.route("/profile/edit", methods=["GET", "POST"])
+    @login_required
+    def edit_profile():
+        """
+        Edit current user's profile.
+        """
+        user_id = current_user.get_id()
+        user_doc = db.users.find_one({"_id": ObjectId(user_id)})
+
+        if not user_doc:
+            return "User not found.", 404
+
+        if request.method == "POST":
+            full_name = request.form.get("full_name", "").strip()
+            netid = request.form.get("netid", "").strip()
+            email = request.form.get("email", "").strip()
+
+            if not full_name or not netid or not email:
+                return render_template("edit_profile.html", user=user_doc, error="All fields are required.")
+
+            db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {
+                    "full_name": full_name,
+                    "netid": netid,
+                    "email": email
+                }}
+            )
+
+            return redirect(url_for("profile"))
+
+        return render_template("edit_profile.html", user=user_doc)
+
     @app.route("/search", methods=["GET"])
     @login_required
     def search():
@@ -137,6 +180,9 @@ def create_app():
         description = (request.form.get("description") or "").strip()
         location_text = (request.form.get("location_text") or "").strip()
         date_str = (request.form.get("date_lost_or_found") or "").strip()
+        phone = (request.form.get("phone") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        other = (request.form.get("other_contact") or "").strip()
 
         # Basic validation
         if post_type not in {"lost", "found"} or not title or not description:
@@ -161,6 +207,13 @@ def create_app():
             "status": "open",
             "location_text": location_text if location_text else None,
             "date_lost_or_found": date_lost_or_found,
+
+            "contact": {
+                "phone": phone if phone else None,
+                "email": email if email else None,
+                "other": other if other else None,
+            },
+
             "created_by": ObjectId(current_user.get_id()),
             "created_at": now,
             "updated_at": now,
@@ -183,8 +236,31 @@ def create_app():
         post = db.posts.find_one({"_id": oid})
         if not post:
             return "Post not found", 404
+        
+        user_doc = db.users.find_one({"_id": post["created_by"]})
+        if user_doc:
+            post["author_name"] = user_doc.get("full_name", "Unknown")
+            post["author_id"] = str(user_doc["_id"])
+        else:
+            post["author_name"] = "Unknown"
+            post["author_id"] = None
 
         return render_template("post_detail.html", post=post)
+    
+    @app.route("/profile/<user_id>")
+    @login_required
+    def profile_by_id(user_id):
+        try:
+            oid = ObjectId(user_id)
+        except Exception:
+            return "Invalid user id", 400
+
+        user_doc = db.users.find_one({"_id": oid})
+        if not user_doc:
+            return "User not found", 404
+
+        user_posts = list(db.posts.find({"created_by": oid}).sort("created_at", -1))
+        return render_template("profile.html", user=user_doc, posts=user_posts)
     
     @app.route("/posts/<post_id>/status", methods=["POST"])
     @login_required
@@ -345,7 +421,23 @@ def create_app():
         Returns:
             rendered template (str): The rendered HTML template.
         """
-        return str(e), 500
+        return "error"
+    
+    @app.route("/profile")
+    @login_required
+    def profile():
+        """
+        User profile page.
+        """
+        user_id = current_user.get_id()
+        user_doc = db.users.find_one({"_id": ObjectId(user_id)})
+
+        if not user_doc:
+            return "User not found.", 404
+
+        user_posts = list(db.posts.find({"created_by": ObjectId(user_id)}).sort("created_at", -1))
+
+        return render_template("profile.html", user=user_doc, posts=user_posts)
 
     return app
 

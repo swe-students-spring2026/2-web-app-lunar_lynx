@@ -418,3 +418,13 @@ body{
 }
 
 .link-row a{ color:#0b0b0b; }
+
+.bottom-actions{
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}

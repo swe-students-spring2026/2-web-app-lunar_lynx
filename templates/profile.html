@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ user.full_name }}'s Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="phone">
+<div class="screen">
+
+  <div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Profile</div>
+  </div>
+
+  <div class="main">
+
+    <p style="margin: 0 0 12px;">
+      <a href="{{ url_for('home') }}" style="color:inherit; text-decoration:none;">← Back to Home</a>
+    </p>
+
+    <!-- Profile header -->
+    <div class="detail-block">
+      <div style="display:flex; justify-content:center; margin-bottom:12px;">
+        <div class="big-photo" style="width:180px; height:180px;"></div>
+      </div>
+
+      <h1 class="h1 center" style="margin:0;">{{ user.full_name }}</h1>
+      <p class="center" style="margin:6px 0 0;"><small>@{{ user.netid }}</small></p>
+
+      <div style="margin-top:14px;">
+        <p class="item-meta" style="margin:6px 0;"><b>NetID:</b> {{ user.netid }}</p>
+        <p class="item-meta" style="margin:6px 0;"><b>Email:</b> {{ user.email }}</p>
+      </div>
+
+      {% if current_user.get_id() == user._id|string %}
+        <a href="{{ url_for('edit_profile') }}"
+           class="primary-btn"
+           style="width:100%; margin-top:14px; text-align:center; display:block;">
+          Edit Profile
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Listings -->
+    <h2 style="margin:18px 0 10px;">
+      {% if current_user.get_id() == user._id|string %}
+        Your Listings
+      {% else %}
+        {{ user.full_name }}'s Listings
+      {% endif %}
+    </h2>
+
+    {% if posts %}
+      {% for post in posts %}
+        <a href="{{ url_for('post_detail', post_id=post._id) }}" style="text-decoration:none;color:inherit;">
+          <div class="item-row">
+            <div class="thumb"></div>
+            <div>
+              <p class="item-title">{{ post.title }}</p>
+              <p class="item-meta">{{ post.type }} | {{ post.status }}</p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    {% else %}
+      <div class="detail-block">
+        <p style="margin:0;">You have no posts yet.</p>
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>
