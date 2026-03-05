@@ -1,77 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Lost & Found</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>Lost & Found</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
 <div class="phone">
 <div class="screen">
 
-<div class="topbar">
-  <div class="avatar-dot"></div>
-  <div class="page-title">Found</div>
-</div>
-
-<div class="main">
-
-<h1 class="h1 center">Lost something?</h1>
-<p class="sub center">Find it here!</p>
-
-<div class="search-block">
-<form method="GET" action="/search">
-    <input class="search-input" type="text" name="query" placeholder="Search posts">
-</form>
-</div>
-
-<div class="list">
-
-{% if posts|length == 0 %}
-  <p>No posts yet.</p>
-{% endif %}
-
-{% for post in posts %}
-
-<a href="/posts/{{ post._id }}" style="text-decoration:none;color:inherit;">
-  <div class="item-row">
-    <div class="thumb"></div>
-    <div>
-      <p class="item-title">{{ post.title }}</p>
-
-      <p class="item-meta">
-        {{ post.type }} | {{ post.status }}
-      </p>
-
-      <p class="item-desc">{{ post.description }}</p>
-
-      {% if post.location_text %}
-        <p class="item-meta">{{ post.location_text }}</p>
-      {% endif %}
-
-      {% if post.created_at %}
-        <p class="item-meta">
-          <small>
-            Posted: {{ post.created_at }}
-            {% if post.author_name %}
-              | Posted by: {{ post.author_name }}
-            {% endif %}
-          </small>
-        </p>
-      {% endif %}
-    </div>
+  <div class="topbar">
+    <div class="avatar-dot"></div>
+    <div class="page-title">Found</div>
   </div>
-</a>
-{% endfor %}
 
-</div>
+  <div class="main">
 
-<div class="bottom-actions">
-  <a href="/posts/new" class="primary-btn" style="flex:1; margin:0; text-align:center;">Create Post</a>
-  <a href="{{ url_for('profile') }}" class="primary-btn" style="flex:1; margin:0; text-align:center;">Profile</a>
-</div>
+    <!-- Search -->
+    <form method="GET" action="/search" style="margin-bottom:14px;">
+      <input class="search-input input-gray" type="text" name="query" placeholder="Search posts">
+    </form>
 
-</div>
+    <!-- Posts List -->
+    {% if posts|length == 0 %}
+      <div class="detail-block">
+        <p style="margin:0;">No posts yet.</p>
+      </div>
+    {% endif %}
+
+    {% for post in posts %}
+      <a href="/posts/{{ post._id }}" style="text-decoration:none; color:inherit;">
+        <div class="item-row">
+
+          <div class="thumb"></div>
+
+          <div>
+            <p class="item-title">{{ post.title }}</p>
+
+            {% if post.location_text %}
+              <p class="item-meta">{{ post.location_text }}</p>
+            {% endif %}
+
+            <p class="item-desc">{{ post.description }}</p>
+
+            <p class="item-meta">{{ post.type }} | {{ post.status }}</p>
+
+            {% if post.created_at %}
+              <p class="item-meta"><small>Posted: {{ post.created_at }}</small></p>
+            {% endif %}
+          </div>
+
+        </div>
+      </a>
+    {% endfor %}
+
+  </div>
+
+  <!-- Bottom buttons pinned to bottom -->
+  <div class="bottom-actions">
+    <a href="/posts/new" class="primary-btn" style="flex:1; margin:0; text-align:center;">Create Post</a>
+    <a href="{{ url_for('profile') }}" class="primary-btn" style="flex:1; margin:0; text-align:center;">Profile</a>
+  </div>
 
 </div>
 </div>

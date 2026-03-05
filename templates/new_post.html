@@ -18,17 +18,16 @@
 
   <div class="main">
 
-    <!-- Back button -->
+    <!-- Back Button -->
     <a href="{{ url_for('home') }}"
        class="primary-btn"
        style="display:block; text-align:center; width:100%; margin-bottom:20px;">
        Back to Home
     </a>
 
-
     <form method="POST">
 
-      <!-- Post info -->
+      <!-- Post Information -->
       <div class="detail-block">
 
         <label>Type</label>
@@ -40,12 +39,12 @@
         <div style="height:16px;"></div>
 
         <label>Title</label>
-        <input type="text" name="title" class="input-gray">
+        <input type="text" name="title" class="input-gray" required>
 
         <div style="height:16px;"></div>
 
         <label>Description</label>
-        <textarea name="description" class="input-gray"></textarea>
+        <textarea name="description" class="input-gray" rows="4" required></textarea>
 
         <div style="height:16px;"></div>
 
@@ -60,7 +59,7 @@
       </div>
 
 
-      <!-- Contact info -->
+      <!-- Contact Information -->
       <div class="detail-block" style="margin-top:20px;">
 
         <h3 style="margin-top:0;">Contact Information</h3>
@@ -87,7 +86,7 @@
 
         <div style="height:14px;"></div>
 
-        <label for="other_contact">Other Contact (Instagram, X, etc)</label>
+        <label for="other_contact">Other Contact (Instagram / X / etc)</label>
         <input
           id="other_contact"
           name="other_contact"
